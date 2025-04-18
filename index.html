@@ -1,0 +1,171 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estudia el Encéfalo - Vista Lateral</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Arrastra las partes al encéfalo 🧠</h1>
+  <div class="container">
+    <div class="labels">
+      <div class="draggable" draggable="true" id="corteza">Corteza cerebral</div>
+      <div class="draggable" draggable="true" id="cerebelo">Cerebelo</div>
+      <div class="draggable" draggable="true" id="bulbo">Bulbo raquídeo</div>
+      <div class="draggable" draggable="true" id="talamo">Tálamo</div>
+      <div class="draggable" draggable="true" id="hipotalamo">Hipotálamo</div>
+      <div class="draggable" draggable="true" id="cuerpo">Cuerpo calloso</div>
+      <div class="draggable" draggable="true" id="hemisferio">Hemisferio cerebral</div>
+      <div class="draggable" draggable="true" id="hipofosis">Hipófosis</div>
+      <div class="draggable" draggable="true" id="protuberancia">Protuberancia</div>
+      <div class="draggable" draggable="true" id="medula">Médula espinal</div>
+    </div>
+
+    <div class="brain-area">
+      <img src="brain-lateral.jpg" alt="Vista lateral del encéfalo">
+      <div class="drop-zone" data-id="corteza" style="top: 100px; left: 350px;"></div>
+      <div class="drop-zone" data-id="cerebelo" style="top: 300px; left: 360px;"></div>
+      <div class="drop-zone" data-id="bulbo" style="top: 340px; left: 260px;"></div>
+      <div class="drop-zone" data-id="talamo" style="top: 220px; left: 250px;"></div>
+      <div class="drop-zone" data-id="hipotalamo" style="top: 185px; left: 195px;"></div>
+      <div class="drop-zone" data-id="cuerpo" style="top: 115px; left: 180px;"></div>
+      <div class="drop-zone" data-id="hemisferio" style="top: 120px; left: 40px;"></div>
+      <div class="drop-zone" data-id="hipofosis" style="top: 253px; left: 170px;"></div>
+      <div class="drop-zone" data-id="protuberancia" style="top: 280px; left: 240px;"></div>
+      <div class="drop-zone" data-id="medula" style="top: 370px; left: 305px;"></div>
+    </div>
+  </div>
+
+  <div id="message" class="hidden">¡Correcto Mi Amor! 🎉</div>
+
+  <script>
+    // script.js
+    const draggables = document.querySelectorAll('.draggable');
+    const dropZones = document.querySelectorAll('.drop-zone');
+    const message = document.getElementById('message');
+
+    draggables.forEach(item => {
+      item.addEventListener('dragstart', e => {
+        e.dataTransfer.setData('text/plain', item.id);
+      });
+    });
+
+    dropZones.forEach(zone => {
+      zone.addEventListener('dragover', e => {
+        e.preventDefault();
+        zone.classList.add('hovered');
+      });
+
+      zone.addEventListener('dragleave', () => {
+        zone.classList.remove('hovered');
+      });
+
+      zone.addEventListener('drop', e => {
+        e.preventDefault();
+        zone.classList.remove('hovered');
+        const draggedId = e.dataTransfer.getData('text/plain');
+        if (draggedId === zone.dataset.id) {
+          const draggedElement = document.getElementById(draggedId);
+          zone.appendChild(draggedElement);
+          showMessage();
+        }
+      });
+    });
+
+    function showMessage() {
+      message.classList.remove('hidden');
+      message.classList.add('show');
+      setTimeout(() => {
+        message.classList.remove('show');
+        message.classList.add('hidden');
+      }, 1500);
+    }
+  </script>
+
+  <style>
+    /* style.css */
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      color: #ff8cec;
+      text-align: center;
+      background-color: #ffffff;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+
+    .labels {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .draggable {
+      padding: 10px 15px;
+      background-color: #ff8cec;
+      color: #ffffff;
+      border: 2px solid #8b00cc;
+      border-radius: 8px;
+      cursor: grab;
+      user-select: none;
+      box-shadow: 4px 4px 9px rgba(255, 30, 225, 0.658);
+      font-weight: bold;
+    }
+
+    .brain-area {
+      position: relative;
+      display: inline-block;
+    }
+
+    .brain-area img {
+      max-width: 500px;
+      height: auto;
+    }
+
+    .drop-zone {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: rgba(0, 255, 0, 0.3);
+      border: 2px dashed #00aa00;
+      transition: background-color 0.2s ease;
+    }
+
+    .drop-zone.hovered {
+      background-color: rgba(0, 255, 0, 0.5);
+    }
+
+    #message {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #4caf50;
+      color: white;
+      padding: 15px 30px;
+      border-radius: 10px;
+      font-size: 18px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    #message.show {
+      opacity: 1;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</body>
+</html>
